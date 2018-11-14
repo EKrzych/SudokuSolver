@@ -29,6 +29,10 @@ public class SudokuSolver {
         return possible(getValuesFromRow(cell.getRow()));
     }
 
+    private List<Integer> possibleInColumn(Cell cell) {
+        return possible(getValuesFromColumn(cell.getColumn()));
+    }
+
     private List<Integer> possible(List<Integer> neighboringValues) {
         List<Integer> possibilities = new ArrayList<>();
         for (int i = 1; i <= 9 ; i++) {
@@ -47,9 +51,12 @@ public class SudokuSolver {
                 .collect(Collectors.toList());
     }
 
-    private List<Integer> possibleInColumn(Cell cell) {
-
-        return null;
+    private List<Integer> getValuesFromColumn(int column) {
+        return sudoku.getCellList().stream()
+                .filter(cell -> cell.getColumn() == column)
+                .filter(Cell::isSet)
+                .map(Cell::getValue)
+                .collect(Collectors.toList());
     }
 
     private List<Integer> possibleInSquare(Cell cell) {
