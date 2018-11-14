@@ -1,10 +1,12 @@
 package com.codecool.reader;
 
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+@Component
 public class CsvReader {
 
     public String[][] readFromFile(String path) {
@@ -16,7 +18,7 @@ public class CsvReader {
             int i = 0;
 
             while ((line = br.readLine()) != null) {
-                sudoku[i] = line.split("\t");
+                sudoku[i] = line.split(" {4}");
                 i++;
             }
         } catch (IOException e) {
