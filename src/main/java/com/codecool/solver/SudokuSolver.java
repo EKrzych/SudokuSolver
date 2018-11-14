@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class SudokuSolver implements Runnable {
     private Sudoku sudoku;
     Thread thread;
+    boolean stopped = false;
 
     private boolean isCorrect = true;
 
@@ -56,10 +57,28 @@ public class SudokuSolver implements Runnable {
                 .isEmpty();
     }
 
+    public void closeThreadWhenNoPossibilities(Cell cell) {
+        List<Integer> possibilities = checkPossibilities(cell);
+        if(possibilities.isEmpty()) {
+            stopThisThread();
+            notify();
+        }
+    }
 
+    private synchronized void stopThisThread() {
+        stopped = true;
+        notify();
+    }
 
     @Override
     public void run() {
+        while(true) {
+            synchronized (this) {
+                if(stopped) {
+                    break;
+                }
+            }
+        }
 
     }
 }
