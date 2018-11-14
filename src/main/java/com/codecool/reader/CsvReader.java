@@ -17,7 +17,7 @@ public class CsvReader {
             int i = 0;
 
             while ((line = br.readLine()) != null) {
-                sudoku[i] = line.split(" ");
+                sudoku[i] = line.split("\t");
                 i++;
             }
         } catch (FileNotFoundException e) {
