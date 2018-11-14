@@ -19,7 +19,7 @@ public class SudokuReader {
         List<Cell> cellList = new ArrayList<>();
         String [][] sudokuArr = csvReader.readFromFile(path);
         for(int i = 0; i < MAX_SIZE; i++) {
-            for(int j = 0; i < MAX_SIZE; j++) {
+            for(int j = 0; j < MAX_SIZE; j++) {
                 int value = Integer.valueOf(sudokuArr[i][j]);
                 if(value == 0) {
                     cellList.add(new Cell(i,j));
