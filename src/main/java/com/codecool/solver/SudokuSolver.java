@@ -26,10 +26,13 @@ public class SudokuSolver {
     }
 
     private List<Integer> possibleInRow(Cell cell) {
+        return possible(getValuesFromRow(cell.getRow()));
+    }
+
+    private List<Integer> possible(List<Integer> neighboringValues) {
         List<Integer> possibilities = new ArrayList<>();
-        List<Integer> valuesFromRow = getValuesFromRow(cell.getRow());
         for (int i = 1; i <= 9 ; i++) {
-            if (!valuesFromRow.contains(i)) {
+            if (!neighboringValues.contains(i)) {
                 possibilities.add(i);
             }
         }
@@ -45,6 +48,7 @@ public class SudokuSolver {
     }
 
     private List<Integer> possibleInColumn(Cell cell) {
+
         return null;
     }
 
