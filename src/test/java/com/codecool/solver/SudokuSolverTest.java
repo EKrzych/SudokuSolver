@@ -23,11 +23,19 @@ public class SudokuSolverTest {
     private SudokuReader sudokuReader;
 
     @Test
-    public void shouldRecogniseSolvedSudoku() {
+    public void shouldRecogniseNotSolvedSudoku() {
         Sudoku sudoku = sudokuReader.createSudoku("src/test/resources/sudoku.csv");
         SudokuSolver sudokuSolver = new SudokuSolver(sudoku);
 
         assertFalse(sudokuSolver.isSudokuSolved());
+    }
+
+    @Test
+    public void shouldRecogniseSolvedSudoku() {
+        Sudoku sudoku = sudokuReader.createSudoku("src/test/resources/solved_sudoku.csv");
+        SudokuSolver sudokuSolver = new SudokuSolver(sudoku);
+
+        assertTrue(sudokuSolver.isSudokuSolved());
     }
 
     @Test
