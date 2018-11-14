@@ -2,15 +2,20 @@ package com.codecool.reader;
 
 import com.codecool.model.Cell;
 import com.codecool.model.Sudoku;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class SudokuReader {
+
     private CsvReader csvReader;
+
     final int MAX_SIZE = 9;
 
-
+    @Autowired
     public SudokuReader(CsvReader csvReader) {
         this.csvReader = csvReader;
     }
