@@ -17,16 +17,17 @@ public class Sudoku {
         StringBuilder sudokuBuilder = new StringBuilder();
         for (int i = 0; i < 81; i++) {
             if (i != 0 && i % 27 == 0) {
-                sudokuBuilder.append("\n - - - - - - - - - - - - ");
-            } else if (i % 9 == 0) {
+                sudokuBuilder.append("\n - - - - - - - - - - - ");
+            }
+            if (i % 9 == 0) {
                 sudokuBuilder.append("\n");
             }
-            if ( i != 0 && i % 3 == 0) {
+            if ( i%9 != 0 && i % 3 == 0) {
                 sudokuBuilder.append(" | ");
             } else {
                 sudokuBuilder.append(" ");
             }
-            sudokuBuilder.append(cellList.get(i));
+            sudokuBuilder.append(cellList.get(i).getValue());
         }
         return sudokuBuilder.toString();
     }
