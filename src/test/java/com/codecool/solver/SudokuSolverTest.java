@@ -12,8 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -81,6 +80,28 @@ public class SudokuSolverTest {
         Cell firstCell = sudoku.getCellList().get(0);
         List<Integer> expectedValues = Arrays.asList(2, 9);
         assertEquals(expectedValues, sudokuSolver.checkPossibilities(firstCell));
+    }
+
+    @Test
+    public void shouldSetValueIfPossible_true() {
+        Sudoku sudoku = sudokuReader.createSudoku("src/test/resources/sudoku.csv");
+        SudokuSolver sudokuSolver = new SudokuSolver(sudoku);
+        Cell cell = sudoku.getCellList().get(5 * 9 + 5);
+
+        assertTrue(sudokuSolver.setValueIfPossible(cell));
+        assertEquals(8, cell.getValue());
+        assertTrue(cell.isSet());
+    }
+
+    @Test
+    public void shouldSetValueIfPossible_false() {
+        Sudoku sudoku = sudokuReader.createSudoku("src/test/resources/sudoku.csv");
+        SudokuSolver sudokuSolver = new SudokuSolver(sudoku);
+        Cell cell = sudoku.getCellList().get(0);
+
+        assertFalse(sudokuSolver.setValueIfPossible(cell));
+        assertEquals(0, cell.getValue());
+        assertFalse(cell.isSet());
     }
 
 }
