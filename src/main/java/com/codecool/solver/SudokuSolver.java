@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class SudokuSolver {
     private Sudoku sudoku;
+
     private boolean isCorrect = true;
 
     public SudokuSolver(Sudoku sudoku) {
@@ -34,6 +35,15 @@ public class SudokuSolver {
 
     private List<Integer> possibleInSquare(Cell cell) {
         return null;
+    }
+
+    private boolean setValueIfPossible(Cell cell) {
+       List<Integer> possibilities = checkPossibilities(cell);
+       if(possibilities.size() == 1) {
+           cell.insertValue(possibilities.get(0));
+           return true;
+       }
+       return false;
     }
 
 

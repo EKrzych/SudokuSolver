@@ -33,4 +33,10 @@ public class Cell {
     public boolean isSet() {
         return isSet;
     }
+
+    public void insertValue(int value) {
+        this.value = value;
+        this.isSet = true;
+    }
+
 }
