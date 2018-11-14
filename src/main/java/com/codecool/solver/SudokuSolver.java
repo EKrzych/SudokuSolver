@@ -33,25 +33,25 @@ public class SudokuSolver implements Runnable {
 
     }
 
-    private List<Integer> checkPossibilities(Cell cell) {
+    List<Integer> checkPossibilities(Cell cell) {
         return intersect(intersect(possibleInRow(cell), possibleInColumn(cell)), possibleInSquare(cell));
     }
 
-    private List<Integer> intersect(List<Integer> list, final List<Integer> secondList) {
+    private List<Integer> intersect(List<Integer> list, List<Integer> secondList) {
         return list.stream()
                 .filter(secondList::contains)
                 .collect(Collectors.toList());
     }
 
-    private List<Integer> possibleInRow(Cell cell) {
+    List<Integer> possibleInRow(Cell cell) {
         return possible(getValuesFromRow(cell.getRow()));
     }
 
-    private List<Integer> possibleInColumn(Cell cell) {
+    List<Integer> possibleInColumn(Cell cell) {
         return possible(getValuesFromColumn(cell.getColumn()));
     }
 
-    private List<Integer> possibleInSquare(Cell cell) {
+    List<Integer> possibleInSquare(Cell cell) {
         return possible(getValuesFromSquare(cell.getRow(), cell.getColumn()));
     }
 
