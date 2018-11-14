@@ -8,12 +8,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SudokuSolver {
+public class SudokuSolver implements Runnable {
     private Sudoku sudoku;
+    Thread thread;
+    boolean stopped = false;
+
     private boolean isCorrect = true;
 
     public SudokuSolver(Sudoku sudoku) {
         this.sudoku = sudoku;
+        thread = new Thread(this);
+        thread.start();
     }
 
     private List<Integer> checkPossibilities(Cell cell) {
@@ -63,6 +68,34 @@ public class SudokuSolver {
                 .map(Cell::getValue)
                 .collect(Collectors.toList());
     }
+    public boolean setValueIfPossible(Cell cell) {
+       List<Integer> possibilities = checkPossibilities(cell);
+       if(possibilities.size() == 1) {
+           cell.insertValue(possibilities.get(0));
+           return true;
+       }
+       return false;
+    }
+
+    public boolean isSudokuSolved() {
+        return this.sudoku.getCellList().stream()
+                .filter(n -> !n.isSet())
+                .collect(Collectors.toList())
+                .isEmpty();
+    }
+
+    public void closeThreadWhenNoPossibilities(Cell cell) {
+        List<Integer> possibilities = checkPossibilities(cell);
+        if(possibilities.isEmpty()) {
+            stopThisThread();
+            notify();
+        }
+    }
+
+    private synchronized void stopThisThread() {
+        stopped = true;
+        notify();
+    }
 
     private List<Integer> getValuesFromSquare(int row, int column) {
         List<Integer> rows = getSquareCoordinates(row);
@@ -80,5 +113,16 @@ public class SudokuSolver {
     private List<Integer> getSquareCoordinates(int coordinate) {
         int shift = coordinate % 3;
         return Arrays.asList(coordinate - shift, coordinate + 1 - shift, coordinate + 2 - shift);
+    }
+    @Override
+    public void run() {
+        while(true) {
+            synchronized (this) {
+                if(stopped) {
+                    break;
+                }
+            }
+        }
+
     }
 }
