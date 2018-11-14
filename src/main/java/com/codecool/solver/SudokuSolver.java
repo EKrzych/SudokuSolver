@@ -4,6 +4,7 @@ import com.codecool.model.Cell;
 import com.codecool.model.Sudoku;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,10 @@ public class SudokuSolver {
         return possible(getValuesFromColumn(cell.getColumn()));
     }
 
+    private List<Integer> possibleInSquare(Cell cell) {
+        return possible(getValuesFromSquare(cell.getRow(), cell.getColumn()));
+    }
+
     private List<Integer> possible(List<Integer> neighboringValues) {
         List<Integer> possibilities = new ArrayList<>();
         for (int i = 1; i <= 9 ; i++) {
@@ -59,9 +64,21 @@ public class SudokuSolver {
                 .collect(Collectors.toList());
     }
 
-    private List<Integer> possibleInSquare(Cell cell) {
-        return null;
+    private List<Integer> getValuesFromSquare(int row, int column) {
+        List<Integer> rows = getSquareCoordinates(row);
+        List<Integer> columns = getSquareCoordinates(column);
+        return sudoku.getCellList().stream()
+                .filter(cell ->
+                        columns.contains(cell.getColumn())
+                                && rows.contains(cell.getRow())
+                )
+                .filter(Cell::isSet)
+                .map(Cell::getValue)
+                .collect(Collectors.toList());
     }
 
-
+    private List<Integer> getSquareCoordinates(int coordinate) {
+        int shift = coordinate % 3;
+        return Arrays.asList(coordinate - shift, coordinate + 1 - shift, coordinate + 2 - shift);
+    }
 }
