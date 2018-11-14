@@ -3,6 +3,7 @@ package com.codecool.solver;
 import com.codecool.model.Cell;
 import com.codecool.model.Sudoku;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,22 @@ public class SudokuSolver {
     }
 
     private List<Integer> possibleInRow(Cell cell) {
-        return null;
+        List<Integer> possibilities = new ArrayList<>();
+        List<Integer> valuesFromRow = getValuesFromRow(cell.getRow());
+        for (int i = 1; i <= 9 ; i++) {
+            if (!valuesFromRow.contains(i)) {
+                possibilities.add(i);
+            }
+        }
+        return possibilities;
+    }
+
+    private List<Integer> getValuesFromRow(int row) {
+        return sudoku.getCellList().stream()
+                .filter(cell -> cell.getRow() == row)
+                .filter(Cell::isSet)
+                .map(Cell::getValue)
+                .collect(Collectors.toList());
     }
 
     private List<Integer> possibleInColumn(Cell cell) {
