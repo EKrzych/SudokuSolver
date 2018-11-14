@@ -16,7 +16,9 @@ public class Sudoku {
     public String toString() {
         StringBuilder sudokuBuilder = new StringBuilder();
         for (int i = 0; i < 81; i++) {
-            if (i % 9 == 0) {
+            if (i != 0 && i % 27 == 0) {
+                sudokuBuilder.append("\n - - - - - - - - - - - - ");
+            } else if (i % 9 == 0) {
                 sudokuBuilder.append("\n");
             }
             if ( i != 0 && i % 3 == 0) {
