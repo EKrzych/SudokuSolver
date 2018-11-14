@@ -19,7 +19,7 @@ public class SudokuSolverTest {
     private SudokuReader sudokuReader;
 
     @Test
-    public void shoudRecogniseSolvedSudoku() {
+    public void shouldRecogniseNotSolvedSudoku() {
         Sudoku sudoku = sudokuReader.createSudoku("src/test/resources/sudoku.csv");
         SudokuSolver sudokuSolver = new SudokuSolver(sudoku);
 
