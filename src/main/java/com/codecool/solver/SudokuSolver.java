@@ -21,6 +21,18 @@ public class SudokuSolver implements Runnable {
         thread.start();
     }
 
+    @Override
+    public void run() {
+        while(true) {
+            synchronized (this) {
+                if(stopped) {
+                    break;
+                }
+            }
+        }
+
+    }
+
     private List<Integer> checkPossibilities(Cell cell) {
         return intersect(intersect(possibleInRow(cell), possibleInColumn(cell)), possibleInSquare(cell));
     }
@@ -68,6 +80,25 @@ public class SudokuSolver implements Runnable {
                 .map(Cell::getValue)
                 .collect(Collectors.toList());
     }
+
+    private List<Integer> getValuesFromSquare(int row, int column) {
+        List<Integer> rows = getSquareCoordinates(row);
+        List<Integer> columns = getSquareCoordinates(column);
+        return sudoku.getCellList().stream()
+                .filter(cell ->
+                        columns.contains(cell.getColumn())
+                                && rows.contains(cell.getRow())
+                )
+                .filter(Cell::isSet)
+                .map(Cell::getValue)
+                .collect(Collectors.toList());
+    }
+
+    private List<Integer> getSquareCoordinates(int coordinate) {
+        int shift = coordinate % 3;
+        return Arrays.asList(coordinate - shift, coordinate + 1 - shift, coordinate + 2 - shift);
+    }
+
     public boolean setValueIfPossible(Cell cell) {
        List<Integer> possibilities = checkPossibilities(cell);
        if(possibilities.size() == 1) {
@@ -95,34 +126,5 @@ public class SudokuSolver implements Runnable {
     private synchronized void stopThisThread() {
         stopped = true;
         notify();
-    }
-
-    private List<Integer> getValuesFromSquare(int row, int column) {
-        List<Integer> rows = getSquareCoordinates(row);
-        List<Integer> columns = getSquareCoordinates(column);
-        return sudoku.getCellList().stream()
-                .filter(cell ->
-                        columns.contains(cell.getColumn())
-                                && rows.contains(cell.getRow())
-                )
-                .filter(Cell::isSet)
-                .map(Cell::getValue)
-                .collect(Collectors.toList());
-    }
-
-    private List<Integer> getSquareCoordinates(int coordinate) {
-        int shift = coordinate % 3;
-        return Arrays.asList(coordinate - shift, coordinate + 1 - shift, coordinate + 2 - shift);
-    }
-    @Override
-    public void run() {
-        while(true) {
-            synchronized (this) {
-                if(stopped) {
-                    break;
-                }
-            }
-        }
-
     }
 }
