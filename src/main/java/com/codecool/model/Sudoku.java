@@ -1,6 +1,7 @@
 package com.codecool.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Sudoku {
     private List<Cell> cellList;
@@ -30,5 +31,20 @@ public class Sudoku {
             sudokuBuilder.append(cellList.get(i).getValue());
         }
         return sudokuBuilder.toString();
+    }
+
+    public Sudoku deepCopy() {
+        return new Sudoku(
+                cellList.stream()
+                .map(cell -> new Cell(cell))
+                .collect(Collectors.toList())
+        );
+    }
+
+
+    public Cell getCell(int row, int column) {
+        return cellList.stream()
+                .filter(n -> n.getRow() == row && n.getColumn() == column)
+                .findFirst().orElse(null);
     }
 }
