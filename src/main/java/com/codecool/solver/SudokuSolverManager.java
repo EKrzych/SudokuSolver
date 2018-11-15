@@ -17,23 +17,28 @@ public class SudokuSolverManager {
     public Sudoku findSolution(Sudoku sudokuToSolve) {
         List <SudokuSolver>  sudokuSolverList = new ArrayList<>();
         sudokuSolverList.add(new SudokuSolver(sudokuToSolve));
+        List <SudokuSolver> sudokuSolversToAdd = new ArrayList<>();
 
         while(true) {
-            Iterator iterator = sudokuSolverList.iterator();
+            sudokuSolverList.addAll(sudokuSolversToAdd);
+            sudokuSolversToAdd = new ArrayList<>();
+
+            Iterator <SudokuSolver> iterator = sudokuSolverList.iterator();
+
             while (iterator.hasNext()) {
-                SudokuSolver sudokuSolver = (SudokuSolver) iterator.next();
+                SudokuSolver sudokuSolver = iterator.next();
                 if (sudokuSolver.isSudokuSolved()) {
                     return sudokuSolver.getSudoku();
 
                 } else if (sudokuSolver.isSudokuIncorrect()) {
-                    sudokuSolverList.remove(sudokuSolver);
+                    iterator.remove();
 
                 } else if (sudokuSolver.isMoreThanOnePossibilityForEachCell()) {
 
                     for (Sudoku sudoku : sudokuSolver.createSudokuList()) {
-                        sudokuSolverList.add(new SudokuSolver(sudoku));
+                        sudokuSolversToAdd.add(new SudokuSolver(sudoku));
                     }
-                    sudokuSolverList.remove(sudokuSolver);
+                    iterator.remove();
 
                 } else if (sudokuSolverList.isEmpty()) {
                     return null;
