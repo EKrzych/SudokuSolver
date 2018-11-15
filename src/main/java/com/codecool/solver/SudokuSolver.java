@@ -11,15 +11,12 @@ import java.util.stream.Collectors;
 
 public class SudokuSolver implements Runnable {
     private Sudoku sudoku;
-    Thread thread;
-    boolean stopped = false;
 
-    private boolean isCorrect = true;
+
 
     public SudokuSolver(Sudoku sudoku) {
         this.sudoku = sudoku;
-        thread = new Thread(this);
-        thread.start();
+        new Thread(this).start();
     }
 
     public SudokuSolver() {
@@ -28,12 +25,6 @@ public class SudokuSolver implements Runnable {
     @Override
     public void run() {
         while(solve()) {
-//            synchronized (this) {
-//                if(stopped) {
-//                    break;
-//                }
-//            }
-            System.out.println("Im in sudoku solver");
         }
 
     }
@@ -118,7 +109,6 @@ public class SudokuSolver implements Runnable {
        List<Integer> possibilities = checkPossibilities(cell);
        if(possibilities.size() == 1) {
            cell.insertValue(possibilities.get(0));
-           System.out.println(sudoku.toString());
            return true;
        }
        return false;
@@ -138,11 +128,6 @@ public class SudokuSolver implements Runnable {
             }
         }
         return false;
-    }
-
-    private synchronized void stopThisThread() {
-        stopped = true;
-        notify();
     }
 
     public Sudoku getSudoku() {
@@ -169,7 +154,30 @@ public class SudokuSolver implements Runnable {
         return true;
     }
 
+    private Cell getCellWithMinPossibilities() {
+        Cell cellWithMinPossibilities = null;
+        int minCount = 9;
+        for(Cell cell : getCellsWithoutValue()) {
+            int possibilitiesCount = checkPossibilities(cell).size();
+            if (possibilitiesCount <= minCount) {
+                cellWithMinPossibilities = cell;
+                minCount = possibilitiesCount;
+            }
+        }
+
+        return cellWithMinPossibilities;
+    }
+
     public List<Sudoku> createSudokuList() {
-        return new ArrayList<>();
+        List<Sudoku> sudokuList = new ArrayList<>();
+        Cell cell = getCellWithMinPossibilities();
+        for(int value : checkPossibilities(cell)) {
+
+            Sudoku newSudoku = sudoku.deepCopy();
+            newSudoku.getCell(cell.getRow(), cell.getColumn()).insertValue(value);
+            sudokuList.add(newSudoku);
+
+        }
+        return sudokuList;
     }
 }
