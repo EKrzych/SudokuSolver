@@ -25,7 +25,7 @@ public class App implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        System.out.println(sudokuSolverManager.findSolution(sudokuReader.createSudoku("src/main/resources/sudoku.csv")).toString());
+        System.out.println(sudokuSolverManager.findSolution(sudokuReader.createSudoku("src/main/resources/hardestSudoku.csv")).toString());
 
     }
 }
