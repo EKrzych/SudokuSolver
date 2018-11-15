@@ -20,7 +20,7 @@ public class Sudoku {
             if (i != 0 && i % 27 == 0) {
                 sudokuBuilder.append("\n - - - - - - - - - - - ");
             }
-            if (i % 9 == 0) {
+            if (i != 0 && i % 9 == 0) {
                 sudokuBuilder.append("\n");
             }
             if ( i%9 != 0 && i % 3 == 0) {
