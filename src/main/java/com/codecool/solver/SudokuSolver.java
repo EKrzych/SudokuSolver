@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class SudokuSolver implements Runnable {
     private Sudoku sudoku;
     Thread thread;
@@ -21,14 +22,18 @@ public class SudokuSolver implements Runnable {
         thread.start();
     }
 
+    public SudokuSolver() {
+    }
+
     @Override
     public void run() {
-        while(true) {
-            synchronized (this) {
-                if(stopped) {
-                    break;
-                }
-            }
+        while(solve()) {
+//            synchronized (this) {
+//                if(stopped) {
+//                    break;
+//                }
+//            }
+            System.out.println("Im in sudoku solver");
         }
 
     }
@@ -125,16 +130,37 @@ public class SudokuSolver implements Runnable {
                 .isEmpty();
     }
 
-    public void closeThreadWhenNoPossibilities(Cell cell) {
-        List<Integer> possibilities = checkPossibilities(cell);
-        if(possibilities.isEmpty()) {
-            stopThisThread();
-            notify();
+    public boolean isSudokuIncorrect() {
+        for( Cell cell : sudoku.getCellList()) {
+            if(!cell.isSet() && checkPossibilities(cell).isEmpty()) {
+                return true;
+            }
         }
+        return false;
     }
 
     private synchronized void stopThisThread() {
         stopped = true;
         notify();
+    }
+
+    public Sudoku getSudoku() {
+        return sudoku;
+    }
+
+    public boolean isMoreThanOnePossibilityForEachCell() {
+        boolean isisMoreThanOnePossibility = true;
+        for(Cell cell : sudoku.getCellList()) {
+
+            if(!cell.isSet() && checkPossibilities(cell).size() <= 1) {
+
+                isisMoreThanOnePossibility = false;
+            }
+        }
+        return isisMoreThanOnePossibility;
+    }
+
+    public List<Sudoku> createSudokuList() {
+        return new ArrayList<>();
     }
 }
