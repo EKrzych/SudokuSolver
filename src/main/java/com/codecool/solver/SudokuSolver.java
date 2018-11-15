@@ -40,7 +40,7 @@ public class SudokuSolver implements Runnable {
 
     public boolean solve() {
         boolean isChanged = false;
-        for (Cell cell : sudoku.getCellList()) {
+        for (Cell cell : getCellsWithoutValue()) {
             if (setValueIfPossible(cell)) {
                 isChanged = true;
             }
@@ -114,25 +114,26 @@ public class SudokuSolver implements Runnable {
         return Arrays.asList(coordinate - shift, coordinate + 1 - shift, coordinate + 2 - shift);
     }
 
-    public boolean setValueIfPossible(Cell cell) {
+    public synchronized boolean setValueIfPossible(Cell cell) {
        List<Integer> possibilities = checkPossibilities(cell);
        if(possibilities.size() == 1) {
            cell.insertValue(possibilities.get(0));
+           System.out.println(sudoku.toString());
            return true;
        }
        return false;
     }
 
-    public boolean isSudokuSolved() {
+    public synchronized boolean isSudokuSolved() {
         return this.sudoku.getCellList().stream()
                 .filter(n -> !n.isSet())
                 .collect(Collectors.toList())
                 .isEmpty();
     }
 
-    public boolean isSudokuIncorrect() {
-        for( Cell cell : sudoku.getCellList()) {
-            if(!cell.isSet() && checkPossibilities(cell).isEmpty()) {
+    public synchronized boolean isSudokuIncorrect() {
+        for( Cell cell : getCellsWithoutValue()) {
+            if(checkPossibilities(cell).isEmpty()) {
                 return true;
             }
         }
@@ -148,16 +149,24 @@ public class SudokuSolver implements Runnable {
         return sudoku;
     }
 
-    public boolean isMoreThanOnePossibilityForEachCell() {
-        boolean isisMoreThanOnePossibility = true;
-        for(Cell cell : sudoku.getCellList()) {
+    private List<Cell> getCellsWithoutValue() {
+        return sudoku.getCellList().stream()
+                .filter(n -> !n.isSet())
+                .collect(Collectors.toList());
+    }
 
-            if(!cell.isSet() && checkPossibilities(cell).size() <= 1) {
+    public synchronized boolean isMoreThanOnePossibilityForEachCell() {
+        if(getCellsWithoutValue().isEmpty()) {
+            return false;
+        }
+        for(Cell cell : getCellsWithoutValue()) {
 
-                isisMoreThanOnePossibility = false;
+            if(checkPossibilities(cell).size() <= 1) {
+                return false;
             }
         }
-        return isisMoreThanOnePossibility;
+
+        return true;
     }
 
     public List<Sudoku> createSudokuList() {
