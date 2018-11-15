@@ -18,6 +18,13 @@ public class Cell {
         this.column = column;
     }
 
+    public Cell(Cell cell) {
+        this.row = cell.getRow();
+        this.column = cell.getColumn();
+        this.value = cell.getValue();
+        this.isSet = cell.isSet();
+    }
+
     public int getRow() {
         return row;
     }
