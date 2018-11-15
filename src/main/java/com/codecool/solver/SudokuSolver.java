@@ -33,6 +33,16 @@ public class SudokuSolver implements Runnable {
 
     }
 
+    public boolean solve() {
+        boolean isChanged = false;
+        for (Cell cell : sudoku.getCellList()) {
+            if (setValueIfPossible(cell)) {
+                isChanged = true;
+            }
+        }
+        return isChanged;
+    }
+
     List<Integer> checkPossibilities(Cell cell) {
         return intersect(intersect(possibleInRow(cell), possibleInColumn(cell)), possibleInSquare(cell));
     }
