@@ -1,3 +1,3 @@
 # SudokuSolver
 
-Write a program that would be able to solve Sudoku puzzles.
+Program that is able to solve Sudoku puzzles. Using multithreading for computation.
