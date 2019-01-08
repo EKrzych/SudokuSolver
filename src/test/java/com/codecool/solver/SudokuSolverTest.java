@@ -47,6 +47,13 @@ public class SudokuSolverTest {
         List<Integer> expectedValuesFromFirstRow = Arrays.asList(1, 2, 5, 7, 9);
         assertEquals(expectedValuesFromFirstRow, sudokuSolver.possibleInRow(cellFromFirstRow));
 
+    }
+
+    @Test
+    public void shouldReturnPossibleValuesInRow_7() {
+        Sudoku sudoku = sudokuReader.createSudoku("src/test/resources/sudoku.csv");
+        SudokuSolver sudokuSolver = new SudokuSolver(sudoku);
+
         Cell cellFromSeventhRow = sudoku.getCellList().get(6 * 9 + 1);
         List<Integer> expectedValuesFromSeventhRow = Arrays.asList(2, 5, 7, 8, 9);
         assertEquals(expectedValuesFromSeventhRow, sudokuSolver.possibleInRow(cellFromSeventhRow));
